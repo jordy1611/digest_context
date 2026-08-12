@@ -1,4 +1,4 @@
-*Context for Job Digest Project*
+#Context for Job Digest Project#
 </br>
 agents.md is starting point ai entry
 </br>
