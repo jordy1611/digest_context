@@ -44,3 +44,4 @@ Primary contact search in Part 2, ahead of Apollo. Roughly $0.50 per run.
 ## Note on Paige's setup
 
 Paige's credentials are deliberately **not** in this repo. Her setup is entirely separate (different inbox, different AgentMail org) and the separation rule in [../agents.md](../agents.md) forbids mixing the two. If you need her credentials, they belong in her own project, not here.
+
