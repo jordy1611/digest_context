@@ -58,7 +58,7 @@ Older companies likely sitting on old/legacy codebases get a **flag**, not a rej
 - Fintech / financial-data domain (he has real experience here, it's a plus — but he's open to almost anything).
 
 ### Experience Required
-- **Hard reject:** roles requiring 7 or more years of experience.
+- **Hard reject:** roles requiring 7 or more years of experience. Roles requiring under 3 or less years of experience.
 
 ### Role Type
 - **Hard reject:** backend-only roles (no frontend responsibility).
