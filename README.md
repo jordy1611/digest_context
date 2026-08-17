@@ -40,4 +40,16 @@ Assembly is template interpolation, not an AI call — otherwise the model quiet
 ## Still open
 
 1. **Whether the digest agent runs in Cowork or a self-hosted runner.** The tradeoff: a self-hosted runner talks to Postgres directly with no API layer, while Cowork can't. Choosing Cowork means building an HTTP or MCP surface for that reason specifically.
+
+   A second argument for that surface: it's also the natural credential boundary. If it exists for Postgres anyway, the AgentMail and Exa calls can sit behind it too, so the agent holds one scoped token instead of three provider keys, and rotating a provider key never touches the agent.
 2. **Where the intro-guidelines file lives.** The argument for keeping it in the repo: both processes share one copy, and `git log` tells you what changed when the intros get worse.
+3. **How credentials reach a remote agent.** Blocked on (1). `.env` is gitignored, so a clone never carries values — the repo states which variable is needed and the runtime supplies it. A self-hosted runner injects them on the box; a hosted agent needs them in the platform's secret store. Note that Apollo doesn't fit this model at all: it's a browser session, not an API key, so it needs a logged-in browser profile on a machine we control, or replacing Apollo with Exa-only.
+
+## Known inconsistencies to reconcile
+
+These are documented so they aren't rediscovered later. None block current work.
+
+- **Process 2 is described two ways.** This README calls it a single Haiku call with a structured schema. [steps.md](steps.md) describes three steps (Sonnet rewrite, Haiku contact lookup, no-model assembly). The first is the target design, the second is what the OpenClaw system actually did. Reconcile when Part 2 gets built.
+- **Step files describe the old email-based system** in their body text, with the new database/UI design called out inline as "new-architecture note" blocks. See [agents.md](agents.md) § 5.
+- **[shared/jordan-cover-letter-system.md](shared/jordan-cover-letter-system.md) has its own "workflow step 1/2/3"**, unrelated to the pipeline numbering. It's an internal reading order for that document, not pipeline structure. Cosmetic; nothing points at it by number.
+- **Credential rotation is pending.** Two AgentMail keys and the Apollo password were committed in `165d7c7` and are being rotated rather than scrubbed from history. Paige's AgentMail key was exposed by the same commit and needs rotating too, even though it's no longer referenced here.
