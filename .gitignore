@@ -1,0 +1,12 @@
+# Secrets — never commit real credential values.
+# See tools/TOOLSAPIKEYS.md for which variable holds what.
+.env
+.env.*
+!.env.example
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
