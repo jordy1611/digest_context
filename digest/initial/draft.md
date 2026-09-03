@@ -11,25 +11,39 @@ Voice rules and correction history are shared with Part 2's rewrite step — see
 
 ---
 
-## Draft Outreach Intros (Sonnet Sub-Agent)
+## Draft Outreach Intros (one subagent per role)
 
 This file is a single step — nothing to number.
 
-Spawn a Sonnet sub-agent via `sessions_spawn` with `model: "claude-sonnet-4-6"` and `thinking: "enabled"`. Pass it:
-- The full list of qualifying roles with company name, role title, JD summary, stack/product age signal, and any fit notes from the parsing/summary steps
-- The contents of `~/.openclaw/agent-reference/jordan/jordan-cover-letter-system.md`
-- The most recent 20 entries from `~/.openclaw/data/jordan-voice-corrections.md` (create empty if missing)
+**Spawn a separate subagent for each role, on the latest Opus. Not one subagent for all
+of them.** This is the most important thing on this page.
 
-Instruct the sub-agent to draft the 1–2 company-specific hook sentences only for each role — NOT the two fixed opener sentences ("I'm reaching out..." and "I care about..."). Those are always the same and Jordan doesn't need to review them.
+A single session drafting fifteen intros has eleven of its own intros in context by the
+time it writes the twelfth. It starts pattern-matching on those instead of on the voice
+rules — recent content outranks instructions loaded earlier, and self-consistency
+pressure makes it treat its own drift as the established style. The rules aren't
+violated so much as gradually outvoted, which is why quality degrades down the list
+rather than being uniformly bad. That failure was observed in the previous system.
 
-**Critical output instruction to pass to the sub-agent:** Your final response must contain ONLY the hook sentences as a structured list keyed by company name — no preamble, no explanation, no reasoning. Example format:
-```
-Jukebox Health: [hook sentence(s)]
-Customer.io: [hook sentence(s)]
-```
-Nothing else.
+A fresh subagent per role cannot drift that way: it has never seen another intro.
 
-Wait for the sub-agent to complete. Retrieve **only the last message** from the sub-agent using `sessions_history` with `limit: 1` — do not pull the full session history. Extract the hook sentences from that message and continue to [digest.md](digest.md).
+Pass each subagent **only what it needs for its one role**:
+- That single role: company, title, JD summary, stack/product age signal, fit notes
+- [../../shared/jordan-cover-letter-system.md](../../shared/jordan-cover-letter-system.md)
+- [../../shared/jordan-intro-hook-rules.md](../../shared/jordan-intro-hook-rules.md)
+- [../../shared/jordan-resume.md](../../shared/jordan-resume.md) — grounding facts
+- The most recent 20 entries from [../../data/voice-corrections.md](../../data/voice-corrections.md)
+
+Nothing else. Every extra token in that context competes with the voice rules.
+
+Instruct it to draft the 1–2 company-specific hook sentences **only** — NOT the two
+fixed opener sentences ("I'm reaching out..." and "I care about..."). Those never change
+and Jordan doesn't need to review them.
+
+**Critical output instruction:** the final response must contain ONLY the hook
+sentences — no preamble, no explanation, no reasoning.
+
+Collect each subagent's result and continue to [digest.md](digest.md).
 
 ---
 

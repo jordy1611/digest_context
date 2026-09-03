@@ -36,10 +36,13 @@ Primary contact search in Part 2, ahead of Apollo. Roughly $0.50 per run.
 
 ## Related paths
 
-- Skills (previous OpenClaw setup): `~/.agents/skills/jordan-job-digest/`, `~/.agents/skills/jordan-job-outreach-workflow/`
-- Reference files (previous OpenClaw setup): `~/.openclaw/agent-reference/jordan/`
-- Company blocklist: `~/.openclaw/data/jordan-company-blocklist.md`
-- Voice corrections log: `~/.openclaw/data/jordan-voice-corrections.md`
+Everything the agent reads now lives in this repo. The OpenClaw paths these replaced
+(`~/.openclaw/...`, `~/.agents/skills/...`) no longer exist on any machine.
+
+- Company blocklist: [../data/company-blocklist.json](../data/company-blocklist.json)
+- Voice corrections log: [../data/voice-corrections.md](../data/voice-corrections.md)
+- Reference files: [../shared/](../shared/)
+- Agent code: the `digest_agent` repo, cloned alongside this one by the routine
 
 ## Note on Paige's setup
 

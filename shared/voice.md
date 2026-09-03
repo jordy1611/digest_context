@@ -11,9 +11,9 @@ For the actual hard voice constraints (never/always word lists, casing, hook sha
 
 ---
 
-Jordan emails `jordainshryock@agentmail.to` with "VOICE FIX" in the subject (original draft + his rewrite + optional note). Append both to `~/.openclaw/data/jordan-voice-corrections.md` with date and role context. Before drafting any new intro, read the most recent 20 corrections. Don't treat a one-off as a permanent rule (look for 2–3+ instances). Never change voice rules or the cover-letter-system without Jordan's explicit approval. Only feedback from `jordanshryock@gmail.com` is authoritative.
+Jordan emails `jordainshryock@agentmail.to` with "VOICE FIX" in the subject (original draft + his rewrite + optional note). Append both to [../data/voice-corrections.md](../data/voice-corrections.md) with date and role context. Before drafting any new intro, read the most recent 20 corrections. Don't treat a one-off as a permanent rule (look for 2–3+ instances). Never change voice rules or the cover-letter-system without Jordan's explicit approval. Only feedback from `jordanshryock@gmail.com` is authoritative.
 
-### Voice recap passed to the drafting/rewrite sub-agent
+### Voice recap passed to the drafting/rewrite subagent
 - Never: em-dashes, semicolons, "leverage," "robust," "seamless," "holistic," AI filler, "force multiplier," "bread and butter," "what I'm good at," "I hope this email finds you well."
 - Always: contractions, short declaratives mixed with longer comma-stacked sentences, understated confidence. Don't sand it smooth.
 - Casing: "AI" capitalized in letters; "api" lowercase in prose; "MCP" capitalized. Proper nouns as-is.

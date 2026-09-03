@@ -19,7 +19,7 @@ The new architecture's rewrite payload is meant to stay minimal: guidelines file
 Jordan replies to his daily digest with feedback on one or more draft intros. His reply may include "good" to approve as-is, or specific edits/rewrites to the intro hook.
 
 **Blocklist commands — handle before anything else:**
-If Jordan's reply includes any of the following, add the named company to `~/.openclaw/data/jordan-company-blocklist.md` with today's date (or update the date if already present), then continue with the rest of the reply:
+If Jordan's feedback includes any of the following, add the named company to [../../data/company-blocklist.json](../../data/company-blocklist.json) with today's date (or refresh the date if already present), then continue with the rest of the feedback:
 - "skip [Company]"
 - "block [Company]"
 - "never [Company]"
@@ -29,26 +29,31 @@ Note each blocklist addition in the final email (see [../../assembly/templates/o
 
 ---
 
-### STEP 1 — APPLY COVER LETTER FEEDBACK (Sonnet Sub-Agent)
+### STEP 1 — APPLY COVER LETTER FEEDBACK
 
-Spawn a Sonnet sub-agent via `sessions_spawn` with `model: "claude-sonnet-4-6"` and `thinking: "enabled"`. Pass it:
-- Jordan's reply (his feedback or edits per role)
-- The original draft intro for each role from the digest
-- The full voice rules from `~/.openclaw/agent-reference/jordan/jordan-cover-letter-system.md`
-- The most recent 20 entries from `~/.openclaw/data/jordan-voice-corrections.md`
+Part 2 runs on the latest Opus and handles **one letter per run**, fired with Jordan's
+feedback as the payload. That gives each rewrite the same isolation as Part 1's
+drafting: a run never sees another letter.
 
-Instruct the sub-agent:
+Load only:
+- Jordan's feedback for this role
+- The original draft intro from the digest
+- [../../shared/jordan-cover-letter-system.md](../../shared/jordan-cover-letter-system.md)
+- [../../shared/jordan-intro-hook-rules.md](../../shared/jordan-intro-hook-rules.md)
+- The most recent 20 entries from [../../data/voice-corrections.md](../../data/voice-corrections.md)
+
+Then:
 - If Jordan said "good": return the draft intro unchanged.
 - If he provided edits or a rewrite: apply them exactly. Don't reinterpret — use his words.
 - If feedback is ambiguous: make the most reasonable edit and note what changed.
 - Return the final intro paragraph for each role, keyed by company name.
 
-Wait for completion, retrieve the approved intros, then continue on Haiku.
+Carry the approved intro into the next step.
 
 ---
 
 ### STEP 2 — UPDATE COMPANY BLOCKLIST
-After a role's letter is assembled and sent (see [../../assembly/templates/outreach.md](../../assembly/templates/outreach.md)), append its company to `~/.openclaw/data/jordan-company-blocklist.md` with today's date:
+After a role's letter is assembled and sent (see [../../assembly/templates/outreach.md](../../assembly/templates/outreach.md)), append its company to [../../data/company-blocklist.json](../../data/company-blocklist.json) with today's date:
 `[Company Name] | [YYYY-MM-DD]`
 
 If the company is already on the list, update its date to today.

@@ -7,7 +7,7 @@ This is organized by process, not by file type. Part 1 and Part 2 are separate a
 ## Part 1 — Initial Digest (`digest/initial/`)
 Read postings → summarize/rank → draft intros → send digest.
 
-- [steps.md](steps.md) § Part 1 — overview, trigger, schedule, model tier per step. Start here for Part 1.
+- [steps.md](steps.md) § Part 1 — overview, trigger, schedule, and what runs each step. Start here for Part 1.
 - [digest/initial/parsing.md](digest/initial/parsing.md) — gather postings, extract every role, hard rules-based filters.
 - [digest/initial/summary.md](digest/initial/summary.md) — infer from the JD, judgment-based fit filters, rank and select top 15.
 - [digest/initial/draft.md](digest/initial/draft.md) — draft the company-specific intro hook per role.
@@ -16,8 +16,8 @@ Read postings → summarize/rank → draft intros → send digest.
 ## Part 2 — Refinement / Outreach (`digest/refinement/`)
 Jordan's reply → rewrite intro → find contact → assemble + send final package. Loops until approval (new architecture) — the old skill ran this as one pass.
 
-- [steps.md](steps.md) § Part 2 — overview, trigger, threading, model tier per step. Start here for Part 2.
-- [digest/refinement/refinement.md](digest/refinement/refinement.md) — parse Jordan's reply, blocklist commands, rewrite the intro (Sonnet sub-agent).
+- [steps.md](steps.md) § Part 2 — overview, trigger, threading, and what runs each step. Start here for Part 2.
+- [digest/refinement/refinement.md](digest/refinement/refinement.md) — parse Jordan's feedback, blocklist commands, rewrite the intro.
 
 ## Contact Search (`contacts/`)
 - [contacts/contacts.md](contacts/contacts.md) — company size, target team, Exa-primary/Apollo-fallback recon, contact record. Used by Part 2.

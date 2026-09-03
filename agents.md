@@ -92,5 +92,5 @@ If you are executing today, follow the body text. Treat the new-architecture not
 ---
 
 ## 6. THE OTHER INDEXES
-- [steps.md](steps.md) — the pipeline: what happens, in what order, on which model tier. Your next stop after routing.
+- [steps.md](steps.md) — the pipeline: what happens, in what order, and what runs it. Your next stop after routing.
 - [files.md](files.md) — the file map: where any given thing lives. For hunting, not for orientation.

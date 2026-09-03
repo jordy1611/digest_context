@@ -19,14 +19,33 @@ Two agent processes, kept separate. Different triggers, different latency budget
 
 Read descriptions → summarize → draft a CV intro → land in the digest.
 
-| Step | File | Model | What happens |
+| Step | File | Runs as | What happens |
 |---|---|---|---|
-| 1 | [digest/initial/parsing.md](digest/initial/parsing.md) | `claude-haiku-4-5-20251001` | Find postings (Built In + inbox alerts), extract every role, apply hard rules-based filters. The agentic step (Agent SDK loop). |
-| 2 | [digest/initial/summary.md](digest/initial/summary.md) | `claude-haiku-4-5-20251001` | Infer from the JD, apply judgment-based fit filters, rank the pool, keep the top 15. Fixed step. |
-| 3 | [digest/initial/draft.md](digest/initial/draft.md) | `claude-sonnet-4-6` | Draft the company-specific intro hook per kept role. Spawned as a sub-agent with `thinking: "enabled"`. Fixed step. |
-| 4 | [digest/initial/digest.md](digest/initial/digest.md) | `claude-haiku-4-5-20251001` | Compose and send the digest (old: email; new: database row, reviewed in the app UI), cost reporting, error handling. |
+| 1 | [digest/initial/parsing.md](digest/initial/parsing.md) | routine + `digest_agent` tooling | Find postings (Built In + inbox alerts), extract every role, apply hard rules-based filters. |
+| 2 | [digest/initial/summary.md](digest/initial/summary.md) | routine | Infer from the JD, apply judgment-based fit filters, rank the pool, keep the top 15. |
+| 3 | [digest/initial/draft.md](digest/initial/draft.md) | one subagent per role | Draft the company-specific intro hook. Each role gets a fresh subagent. |
+| 4 | [digest/initial/digest.md](digest/initial/digest.md) | `digest_agent` tooling | Compose and send the digest. Template interpolation, no model call. |
 
-Don't use Sonnet outside step 3. Don't use Haiku for step 3. Hard cost ceiling: $3 per run.
+### Model selection
+
+**Never pin a model ID in these docs.** They go stale, and the routine form picks the
+model anyway. Choose the latest available model of the right tier at the time.
+
+The routine runs on **one** model, chosen in its form — the latest Sonnet is the right
+default for the run itself. The drafting step is the exception: it spawns a **subagent
+per role on the latest Opus**.
+
+Two separate reasons for that, and the first matters more than the second:
+
+- **Isolation.** A single session writing fifteen intros starts pattern-matching on the
+  eleven it already wrote instead of on the voice rules, and quality degrades down the
+  list rather than uniformly. A fresh subagent per role sees only the voice files and
+  one job summary.
+- **Capability.** Intro writing is the step where following the voice rules closely
+  actually matters, so it gets the strongest model.
+
+Subagents rather than separate routine runs: routines have a daily run cap per account,
+and fifteen runs a morning would risk it while re-cloning the repos each time.
 
 ---
 
@@ -37,11 +56,15 @@ Don't use Sonnet outside step 3. Don't use Haiku for step 3. Hard cost ceiling: 
 
 Approve or leave feedback → recommendations applied to the cover letter → contact search → completed letter + contact sent back, ready for Jordan to send. Repeats until approved (new architecture) — the old workflow ran this once.
 
-| Step | File | Model | What happens |
+| Step | File | Runs as | What happens |
 |---|---|---|---|
-| 1 | [digest/refinement/refinement.md](digest/refinement/refinement.md) | `claude-sonnet-4-6` | Parse the reply, handle blocklist commands, rewrite the intro per feedback. Spawned as a sub-agent with `thinking: "enabled"`. |
-| 2 | [contacts/contacts.md](contacts/contacts.md) | `claude-haiku-4-5-20251001` | Determine company size and target team, find the contact (Exa primary, Apollo browser fallback). |
-| 3 | [assembly/templates/outreach.md](assembly/templates/outreach.md) | none | Interpolate the approved hook into the canonical letter template, send the final package. Template interpolation only, no AI call. |
+| 1 | [digest/refinement/refinement.md](digest/refinement/refinement.md) | routine, latest Opus | Parse the feedback, handle blocklist commands, rewrite the intro. One letter per run. |
+| 2 | [contacts/contacts.md](contacts/contacts.md) | routine | Determine company size and target team, find the contact (Exa primary). |
+| 3 | [assembly/templates/outreach.md](assembly/templates/outreach.md) | tooling, no model | Interpolate the approved hook into the canonical letter template. Template interpolation only, no AI call. |
+
+Part 2 is a **separate routine with an API trigger**, not a schedule: Jordan starts it,
+one letter at a time, with his feedback as the fire payload. That gives it its own model
+selection — the latest Opus — and the same per-letter isolation as Part 1's drafting.
 
 Step 3 deliberately has no model: assembly is interpolation, not generation, so the model can't quietly reword the intro Jordan just tuned.
 

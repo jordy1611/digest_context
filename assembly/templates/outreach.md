@@ -73,8 +73,7 @@ Blocklisted: [Company A], [Company B]
 
 --- RUN COST ---
 AI / model tokens:
-  Haiku (contacts.md, this step): ~$[X.XX]  ([input] in / [output] out)
-  Sonnet (refinement.md — cover letter rewrite): ~$[X.XX]  ([input] in / [output] out)
+  [not measurable from inside the run — see claude.ai/settings/usage]
   Combined: ~$[X.XX]
 Web searches: [count] (~$[X.XX])
 Apollo credits: [N] (~$[X.XX])

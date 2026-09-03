@@ -5,7 +5,7 @@ Context and design docs for Jordan Shryock's job digest. **Documentation only �
 ## Navigation
 
 - **[agents.md](agents.md)** — the AI entry point. Any agent working in this repo reads this first: the invariants, which process it is, and exactly which files to load.
-- **[steps.md](steps.md)** — the pipeline. What happens, in what order, on which model tier.
+- **[steps.md](steps.md)** — the pipeline. What happens, in what order, and what runs it.
 - **[files.md](files.md)** — the file map. Where any given thing lives.
 
 ## What we're building
@@ -25,9 +25,9 @@ One row per opportunity, not per digest. Columns for `job_url`, `summary`, `draf
 
 Different triggers, different latency budgets, no shared state except the database.
 
-**Process 1 (cron).** Finding and reading the posting is genuinely agentic — an Agent SDK loop. Summarize and draft-intro are fixed steps, so they're plain API calls with the model tier chosen per step. That's a pipeline, not a subagent hierarchy: it gives per-step logs, and step 3 can be rerun without redoing step 1.
+**Process 1 (scheduled routine).** A Claude Code routine on Anthropic's cloud infrastructure, running daily. Claude Code *is* the agent — there is no Anthropic API key and no self-managed model calls. The deterministic work (fetching, parsing, rules-based filtering) is code in `digest_agent`; the judgment work (reading alert emails, inferring fit, ranking, summarizing) is the routine itself. Intro drafting spawns one subagent per role so each starts from a clean context.
 
-**Process 2.** JSON in, JSON out. A single Haiku call with a structured schema. Not really an agent.
+**Process 2.** A separate routine with an API trigger rather than a schedule. Jordan fires it per letter with his feedback as the payload, so each rewrite runs in isolation on the strongest model.
 
 ## Part 2 flow
 
@@ -49,7 +49,7 @@ Assembly is template interpolation, not an AI call — otherwise the model quiet
 
 These are documented so they aren't rediscovered later. None block current work.
 
-- **Process 2 is described two ways.** This README calls it a single Haiku call with a structured schema. [steps.md](steps.md) describes three steps (Sonnet rewrite, Haiku contact lookup, no-model assembly). The first is the target design, the second is what the OpenClaw system actually did. Reconcile when Part 2 gets built.
+- **Process 2's shape is still provisional.** [steps.md](steps.md) describes three steps: rewrite, contact lookup, then assembly with no model call. That is what the OpenClaw system did, and it is the current plan, but nothing is built yet. Revisit when Part 2 is actually implemented.
 - **Step files describe the old email-based system** in their body text, with the new database/UI design called out inline as "new-architecture note" blocks. See [agents.md](agents.md) § 5.
 - **[shared/jordan-cover-letter-system.md](shared/jordan-cover-letter-system.md) has its own "workflow step 1/2/3"**, unrelated to the pipeline numbering. It's an internal reading order for that document, not pipeline structure. Cosmetic; nothing points at it by number.
 - **Credential rotation is pending.** Two AgentMail keys and the Apollo password were committed in `165d7c7` and are being rotated rather than scrubbed from history. Paige's AgentMail key was exposed by the same commit and needs rotating too, even though it's no longer referenced here.

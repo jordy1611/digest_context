@@ -68,20 +68,16 @@ Reply with your edits to any draft intro (or "good" to use as-is). That's the on
 RUN COST
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 Extraction: [N] alert emails read → [M] total roles extracted ([per-email breakdown, e.g. "LinkedIn/Owner.com: 7, LinkedIn/Customer.io: 7, Otta: 3, BuiltIn: 15"])
-AI / model tokens:
-  Haiku (parsing.md / summary.md / this step): ~$[X.XX]  ([input] in / [output] out)
-  Sonnet (draft.md — intro drafting): ~$[X.XX]  ([input] in / [output] out)
-  Combined: ~$[X.XX]
-Web searches: [count] (~$[X.XX])
-Apollo credits: 0 ($0.00 — free recon only this run)
-Total this run: ~$[X.XX]
+AI / model tokens: [see note below — not measurable from inside the run]
+Web searches: [count]
 ```
 
 ---
 
 ## Step 2: Cost Management and Reporting
-- **Always report the full run cost at the bottom of the digest email** (the RUN COST block above). Report Haiku and Sonnet costs separately so Jordan can compare model costs over time. Use actual input/output token counts against each model's per-token price (Haiku: $0.80/MTok in, $4/MTok out; Sonnet: $3/MTok in, $15/MTok out). Include web searches, Apollo credits (0 in the digest run), and a combined TOTAL. If exact token counts aren't available, give a clearly-labeled estimate, not a guess of $0.
-- Hard ceiling: $3 per run. If approaching the limit, ship a partial digest with a cost flag.
+- **A routine cannot see its own token usage.** The run happens inside a Claude Code session billed to the subscription, and no token counts are exposed to the code composing the digest. So the digest reports "not measured this run" and points at claude.ai/settings/usage, rather than printing a fabricated figure. A `$0.00` would read as "this run was free," which is worse than saying nothing.
+- **Report what IS countable**: roles per source, extraction counts per alert email, and web searches. Those are the numbers that show whether the run did its job.
+- Watch consumption at [claude.ai/settings/usage](https://claude.ai/settings/usage). Routines draw down subscription usage like any session and also have a daily run cap per account.
 - Web searches in parsing.md / summary.md are limited to fetching JD content when a LinkedIn or Otta/Welcome to the Jungle link isn't directly accessible. All other company research uses the JD itself only.
 
 ## Step 3: Error Handling

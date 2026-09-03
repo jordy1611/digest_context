@@ -7,7 +7,7 @@ description: Part 1, step 1 — find and read postings (gather from sources, ext
 
 Part of the initial digest (Part 1). Overview and cross-cutting rules: [steps.md](../../steps.md) § Part 1. Next step: [summary.md](summary.md).
 
-In the new architecture this is Process 1's agentic step (Agent SDK loop) — find the postings and read them. Summarize and draft-intro downstream are fixed pipeline steps, not part of this loop.
+Finding and reading the postings is the genuinely agentic part of Process 1. The Built In fetch, parse, and rules-based filters are code in `digest_agent`; reading the alert emails and pulling every role out of them is the routine's own work.
 
 ---
 
@@ -20,9 +20,24 @@ This is a live search of roles posted in the **last 24 hours**, not an email fee
 1. `https://www.builtincolorado.com/jobs/remote/engineering/software-engineering/senior?daysSinceUpdated=1&state=Colorado&country=USA&allLocations=true&page=1`
 2. same URL with `&page=2`
 
-Stop early if a page returns "No Results" (an empty page means there are no more fresh roles — don't keep going). Cap at 2 pages even if page 2 is still full; that's ~30 roles, the ceiling for one Haiku run. De-dupe across pages so no role appears twice.
+Stop early if a page returns "No Results" (an empty page means there are no more fresh roles — don't keep going). Cap at 2 pages even if page 2 is still full; that's ~30 roles, enough for one run. De-dupe across pages so no role appears twice.
 
-**Getting company names + JD links (this is where BuiltIn silently loses roles).** A plain `web_fetch` returns each card's salary, top-skills stack, and description but **strips the company name and the direct JD link** (they render as logos/links). Those values ARE present in the raw page HTML as `/company/<slug>` and `/job/<slug>` links, in the same order as the cards. So for each page, capture the readable content (salary/skills/description via `web_fetch`) AND the ordered `/company/` and `/job/` link lists from the raw HTML, then align them by card position. Use the **browser** (`openclaw browser start` if needed) only as a fallback to resolve any card whose company still can't be identified (e.g. a logoless `fallback-image` company). **Never drop a card silently — flag any card whose company couldn't be resolved** and include it with "company unresolved."
+**This is now code**: `digest_agent/src/sources/builtin.js`, run via `npm run parse:builtin`.
+It fetches the raw HTML directly and parses each card as a unit, returning company,
+title, JD link, salary, remote status, location, seniority, posted date, industries,
+skills, and description.
+
+**Do not reimplement this by aligning link lists.** An earlier version of this document
+described collecting the ordered `/company/` and `/job/` hrefs separately and matching
+them by card position, because the old `web_fetch` stripped company names and links.
+That approach is wrong and was measured to be wrong: a real page carries 42 `/company/`
+links against 12 `/job/` links, roughly four per card, so the two lists are different
+lengths and every job after the first mismatch gets attributed to the wrong employer —
+silently, with a digest that still looks plausible.
+
+The fetch throws `BuiltInBlockedError` on a non-200, a bot-challenge page, or a response
+missing the search-page sentinel. **A block is not an empty job market.** Treat it as a
+failure to report at the top of the digest, never as "no roles today."
 
 - Treat anything tagged with an auto-reject industry (see Hard Filters, below) as a hard reject even if the role looks good.
 
@@ -60,7 +75,9 @@ For each role, capture: company, title, JD link, salary range (if listed), locat
 A role must pass ALL of these. Full detail in [../../shared/background.md](../../shared/background.md).
 
 ### Company Blocklist
-Read `~/.openclaw/data/jordan-company-blocklist.md`. For each role, check if the company name appears on the list. If it does and the date is within the last 21 days, hard reject — skip all further analysis. If the entry is older than 21 days, allow through (a new role may have opened). Case-insensitive match on company name.
+Read [../../data/company-blocklist.json](../../data/company-blocklist.json). For each role, check whether the company appears there. If it does and `appliedOn` is within the last 21 days, hard reject — skip all further analysis. Older than 21 days, allow through: a new role may have opened. Case-insensitive match on company name.
+
+This check runs in code (`digest_agent`), and a missing blocklist file is a hard error rather than an empty list — see [../../data/README.md](../../data/README.md).
 
 ### Title Filter
 **Accept:** Senior Software Engineer, Senior Software Developer, Software Engineer, Software Developer, Application Developer, Tech Lead.

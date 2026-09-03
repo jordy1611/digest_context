@@ -2,8 +2,8 @@
 Scoped to career and outreach work only. Separate from Paige's setup. Never mix the two.
 
 ## Source-of-Truth Files
-- **Voice, the canonical cover letter, intro playbook, and the fit-trap screen:** `~/.openclaw/agent-reference/jordan/jordan-cover-letter-system.md`. That file wins on anything about how Jordan writes.
-- **Resume / grounding facts (never drift from these):** `~/.openclaw/agent-reference/jordan/jordan-resume.md`.
+- **Voice, the canonical cover letter, intro playbook, and the fit-trap screen:** [jordan-cover-letter-system.md](jordan-cover-letter-system.md). That file wins on anything about how Jordan writes.
+- **Resume / grounding facts (never drift from these):** [jordan-resume.md](jordan-resume.md).
 
 Read both before drafting any outreach. This doc covers the job-search criteria (filters, ranking, targeting). The cover-letter-system covers the writing.
 
