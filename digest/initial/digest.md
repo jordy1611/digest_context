@@ -1,9 +1,9 @@
 ---
 name: jordan-job-digest-compose
-description: Part 1, step 4 — compose and send the digest (or, in the new architecture, write the reviewed rows to the database), plus cost reporting and error handling for the whole Part 1 run.
+description: Part 1, step 4 — compose and send the digest (or, in the new architecture, write the reviewed rows to the database), plus run reporting and error handling for the whole Part 1 run.
 ---
 
-# Digest — Compose, Send, Cost, Errors
+# Digest — Compose, Send, Report, Errors
 
 Part of the initial digest (Part 1). Previous step: [draft.md](draft.md). Overview: [steps.md](../../steps.md) § Part 1.
 
@@ -65,19 +65,17 @@ Rejected [N] other roles this run for clear hard-filter misses. Reply "show reje
 Reply with your edits to any draft intro (or "good" to use as-is). That's the only reply needed — I'll apply the edits, find the contact, and send back one final email with the completed cover letters and contact info for every role you approved.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
-RUN COST
+RUN SUMMARY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 Extraction: [N] alert emails read → [M] total roles extracted ([per-email breakdown, e.g. "LinkedIn/Owner.com: 7, LinkedIn/Customer.io: 7, Otta: 3, BuiltIn: 15"])
-AI / model tokens: [see note below — not measurable from inside the run]
-Web searches: [count]
 ```
 
 ---
 
-## Step 2: Cost Management and Reporting
-- **A routine cannot see its own token usage.** The run happens inside a Claude Code session billed to the subscription, and no token counts are exposed to the code composing the digest. So the digest reports "not measured this run" and points at claude.ai/settings/usage, rather than printing a fabricated figure. A `$0.00` would read as "this run was free," which is worse than saying nothing.
-- **Report what IS countable**: roles per source, extraction counts per alert email, and web searches. Those are the numbers that show whether the run did its job.
-- Watch consumption at [claude.ai/settings/usage](https://claude.ai/settings/usage). Routines draw down subscription usage like any session and also have a daily run cap per account.
+## Step 2: Run Reporting
+- **There is no cost ceiling.** An earlier version of this document capped a run at $3 and told you to ship a partial digest when approaching it. That is gone: do not truncate a run, skip a step, or drop roles to save tokens.
+- **A routine cannot see its own token usage anyway.** No token counts are exposed to the code composing the digest, so the block reports no cost rather than a fabricated one. Consumption is visible at [claude.ai/settings/usage](https://claude.ai/settings/usage).
+- **Report what IS countable**: roles per source and extraction counts per alert email. Those are the numbers that show whether the run did its job, and the extraction counts are what make under-extraction visible.
 - Web searches in parsing.md / summary.md are limited to fetching JD content when a LinkedIn or Otta/Welcome to the Jungle link isn't directly accessible. All other company research uses the JD itself only.
 
 ## Step 3: Error Handling

@@ -30,7 +30,7 @@ When Exa succeeds:
 
 When Exa returns no usable results, **automatically fall back to Apollo browser**. Do not ask permission — just run it. Auto-pick the top ranked result and spend the credit.
 
-Exa cost is approximately $0.50 per run. Include in the RUN COST block as `Exa agent: ~$0.50`.
+Exa costs approximately $0.50 per run. Note it in the RUN SUMMARY block as `Exa: ~$0.50` — it is a real external charge, unlike model usage, which the run cannot measure.
 
 ## LINKEDIN RULE — ABSOLUTE
 **NEVER navigate to linkedin.com in the browser. NEVER log into LinkedIn. Ever.**

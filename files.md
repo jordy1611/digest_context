@@ -11,7 +11,7 @@ Read postings → summarize/rank → draft intros → send digest.
 - [digest/initial/parsing.md](digest/initial/parsing.md) — gather postings, extract every role, hard rules-based filters.
 - [digest/initial/summary.md](digest/initial/summary.md) — infer from the JD, judgment-based fit filters, rank and select top 15.
 - [digest/initial/draft.md](digest/initial/draft.md) — draft the company-specific intro hook per role.
-- [digest/initial/digest.md](digest/initial/digest.md) — compose and send the digest, cost reporting, error handling.
+- [digest/initial/digest.md](digest/initial/digest.md) — compose and send the digest, run reporting, error handling.
 
 ## Part 2 — Refinement / Outreach (`digest/refinement/`)
 Jordan's reply → rewrite intro → find contact → assemble + send final package. Loops until approval (new architecture) — the old skill ran this as one pass.

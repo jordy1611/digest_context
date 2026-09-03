@@ -53,7 +53,7 @@ Read your process's list in order. Don't read the other process's files — they
 2. [digest/initial/parsing.md](digest/initial/parsing.md) — find postings, extract roles, hard filters
 3. [digest/initial/summary.md](digest/initial/summary.md) — infer from the JD, fit filters, rank, keep top 15
 4. [digest/initial/draft.md](digest/initial/draft.md) — draft the intro hook per role
-5. [digest/initial/digest.md](digest/initial/digest.md) — compose/deliver, cost, error handling
+5. [digest/initial/digest.md](digest/initial/digest.md) — compose/deliver, run reporting, error handling
 
 ### Part 2 — Refinement
 1. [shared/background.md](shared/background.md) — criteria and targeting

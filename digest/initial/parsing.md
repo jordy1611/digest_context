@@ -67,7 +67,7 @@ After processing: mark inbox emails read. Do not delete.
 
 For each role, capture: company, title, JD link, salary range (if listed), location, company size (if available), years of experience required (if listed in JD), posted date, a brief why-it-might-fit note, and any why-it-might-not flags.
 
-**Report a per-source extraction count** so under-extraction is visible. Track, for each alert email, how many roles you pulled from it (e.g. "LinkedIn alert 'Owner.com...': 7 roles extracted"). Carry these counts into the digest's RUN COST / summary area as an "Extraction" line: `[N] alert emails read → [M] total roles extracted ([per-email breakdown])`. If any single LinkedIn or Otta alert yields fewer than 3 roles, re-open its body and confirm you didn't truncate.
+**Report a per-source extraction count** so under-extraction is visible. Track, for each alert email, how many roles you pulled from it (e.g. "LinkedIn alert 'Owner.com...': 7 roles extracted"). Carry these counts into the digest's RUN SUMMARY block as an "Extraction" line: `[N] alert emails read → [M] total roles extracted ([per-email breakdown])`. If any single LinkedIn or Otta alert yields fewer than 3 roles, re-open its body and confirm you didn't truncate.
 
 ---
 

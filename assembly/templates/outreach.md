@@ -71,7 +71,7 @@ After all roles:
 [If any blocklist additions were made:]
 Blocklisted: [Company A], [Company B]
 
---- RUN COST ---
+--- RUN SUMMARY ---
 AI / model tokens:
   [not measurable from inside the run — see claude.ai/settings/usage]
   Combined: ~$[X.XX]
