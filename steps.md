@@ -13,7 +13,7 @@ Two agent processes, kept separate. Different triggers, different latency budget
 
 ## Part 1 — Initial Digest
 
-**Trigger:** cron, every weekday (Mon-Fri) 8:40am MT, or any time Jordan triggers it manually. Offset from Paige's 8:00am digest.
+**Trigger:** the `Daily Job Digest Part 1` routine at claude.ai/code/routines — daily at 8:00am MT, or any time Jordan uses **Run now**.
 **Inbox:** `jordainshryock@agentmail.to`. **Delivers to:** `jordanshryock@gmail.com`.
 **Stops after delivering the digest.** It does not proceed to outreach and does not contact any company.
 

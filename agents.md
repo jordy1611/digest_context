@@ -37,7 +37,7 @@ Two processes. Separate triggers, separate runs, **no shared state and no shared
 
 | If you were triggered by… | You are | Go to |
 |---|---|---|
-| A schedule/cron, weekday morning, nothing from Jordan | **Part 1 — Initial Digest** | [steps.md](steps.md) § Part 1 |
+| The `Daily Job Digest Part 1` routine, on its schedule or via Run now | **Part 1 — Initial Digest** | [steps.md](steps.md) § Part 1 |
 | Jordan giving feedback, approving, or replying about intros already drafted | **Part 2 — Refinement** | [steps.md](steps.md) § Part 2 |
 
 **If you cannot tell which one you are, stop and ask Jordan. Do not guess.** The two processes write to different places and have different side effects.
