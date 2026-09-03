@@ -54,7 +54,19 @@ excel"* — "it was pretty bad." Two failures in one sentence: it names the tool
 
 ---
 
-**#3 ClickUp was the model to follow.** He called it "a better example of what to do." The hook: "ClickUp's focus on architecting scalable, reusable frontend patterns that raise product quality and developer velocity is exactly where I excel, and building with AI tooling every day is already how I work." — General capability claim, no specific tech, no domain-specific boast.
+**#3 ClickUp was the model to follow.** He called it "a better example of what to do" —
+a general capability claim, no specific tech, no domain-specific boast.
+
+The hook as sent broke two rules that were written after it, so it has been corrected
+here rather than left as an example that teaches the mistake. As sent it read "...is
+exactly where I excel, and building with AI tooling..." — the empty phrasing the Intro
+Playbook rejects, plus a second "and" in the same sentence. Corrected:
+
+> ClickUp's focus on architecting reusable frontend patterns that raise product quality
+> and developer velocity is the work I know best. Building with AI tooling every day is
+> already how I work.
+
+Same angle, split into two sentences, empty phrase removed.
 
 ---
 
