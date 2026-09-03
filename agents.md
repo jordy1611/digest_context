@@ -83,11 +83,28 @@ Both processes touch prose in exactly one step each (Part 1's draft step, Part 2
 
 ---
 
-## 5. KNOWN HAZARD — these docs describe two systems at once
+## 5. WHAT IS BUILT, AND WHAT THESE DOCS STILL DESCRIBE
 
-Nothing in this project is built yet. The step files were moved over from the previous OpenClaw setup, so **their body text describes the old email-based system** (digest arrives as an email, Jordan replies to the thread). The rebuild moves this to a database plus a web UI, and the differences are called out inline as **"new-architecture note"** blocks.
+**Part 1 is built** and runs as the `Daily Job Digest Part 1` routine. Its tooling lives
+in the `digest_agent` repo, cloned beside this one on every run: fetching Built In,
+reading the inbox, the rules-based filters, and composing and sending the digest are all
+code. Your job is the judgment between those steps. Intro drafting is not built yet and
+renders a placeholder.
 
-If you are executing today, follow the body text. Treat the new-architecture notes as design intent, not instructions — and if the two conflict in a way that matters for what you are about to do, ask rather than picking one. Project goals and current design: [README.md](README.md).
+**Part 2 is not built.** Its step files describe what the previous OpenClaw system did.
+That is the current plan, not a commitment.
+
+Two things to know before following any step file:
+
+- **Delivery is email today.** Step files carry **"new-architecture note"** blocks about
+  a database and a web UI. That is the next phase, not what exists. Follow the body
+  text; treat those notes as design intent.
+- **Where a step says code does something, let the code do it.** Don't reimplement a
+  filter or a parser by hand because the prose describes the mechanics — the prose is
+  there to explain intent and to be checked against. If the code and the docs disagree
+  about a result, say so in your run report rather than silently picking one.
+
+Project goals and current status: [README.md](README.md).
 
 ---
 

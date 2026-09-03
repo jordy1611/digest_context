@@ -1,6 +1,11 @@
 # Context for Job Digest Project
 
-Context and design docs for Jordan Shryock's job digest. **Documentation only — no code. Nothing here is built yet. This is all design.**
+Context and design docs for Jordan Shryock's job digest. **Documentation and agent-readable
+data. The code lives in a separate repo, [digest_agent](https://github.com/jordy1611/digest_agent).**
+
+The two repos are attached together to each routine and cloned side by side, so the
+agent reads its rules from here and runs its tooling from there. Keeping this repo free
+of code keeps it a single clean copy of the rules that more than one process reads.
 
 ## Navigation
 
@@ -8,9 +13,26 @@ Context and design docs for Jordan Shryock's job digest. **Documentation only �
 - **[steps.md](steps.md)** — the pipeline. What happens, in what order, and what runs it.
 - **[files.md](files.md)** — the file map. Where any given thing lives.
 
-## What we're building
+## Where this stands
 
-Moving the job application tool off OpenClaw into a deployed web app. The digest lands in a database overnight, gets reviewed in a UI, feedback is submitted, AI rewrites the intros, contacts get looked up, and everything assembles into the templates and comes back to the app. Jordan sends the emails himself.
+**Part 1 is built.** It runs as the `Daily Job Digest Part 1` routine on Anthropic's
+cloud infrastructure, daily at 8:00am MT. It fetches Built In Colorado, reads the alert
+emails in `jordainshryock@agentmail.to`, filters, summarizes, and emails Jordan one
+digest. Intro drafting is stubbed with a placeholder and comes next.
+
+**Part 2 is not built.** Its docs describe what the OpenClaw system did, which is the
+current plan but not a commitment.
+
+### Where it's going
+
+Moving the job application tool off OpenClaw into a deployed web app. The digest lands
+in a database overnight, gets reviewed in a UI, feedback is submitted, AI rewrites the
+intros, contacts get looked up, and everything assembles into the templates and comes
+back to the app. Jordan sends the emails himself.
+
+Today's email delivery is the interim step: it exercises the whole pipeline without
+waiting on a database or a UI. The database section below is the next phase, not a
+description of what exists.
 
 ## Database
 
@@ -37,19 +59,54 @@ The status column is the queue, which means how the worker gets triggered is swa
 
 Assembly is template interpolation, not an AI call — otherwise the model quietly rewords the intro that was just tuned.
 
+## How it runs
+
+**A Claude Code routine**, not Cowork and not a self-hosted runner. Routines attach one
+or more GitHub repos, run on a schedule or an API trigger, and execute on Anthropic's
+cloud infrastructure, so nothing depends on a machine Jordan owns being awake.
+
+This also settled the credential question that was blocked on it. There is **no
+Anthropic API key**: Claude Code is the agent, so there are no self-managed model calls
+to authenticate. Provider keys live in the routine's cloud environment
+(`job-digest`), which also sets the network allowlist. Details:
+[tools/TOOLSAPIKEYS.md](tools/TOOLSAPIKEYS.md).
+
+### Why AgentMail is not an MCP connector
+
+AgentMail publishes a hosted MCP server, and using it would have been less work. It
+exposes all of its tools with no read-only mode, including `send_message`,
+`reply_to_message`, and `forward_message` — and a routine may call any tool of an
+attached connector without a permission prompt.
+
+This routine runs unattended and reads untrusted content: job descriptions and alert
+emails written by strangers. Combining that with an unrestricted send tool puts the one
+irreversible thing in [agents.md](agents.md) § 1 — emailing a company — one prompt
+injection away, with nobody watching. So AgentMail is called through code in
+`digest_agent` with the recipient allowlist enforced there. A rule in code cannot be
+talked out of by something in a job posting.
+
 ## Still open
 
-1. **Whether the digest agent runs in Cowork or a self-hosted runner.** The tradeoff: a self-hosted runner talks to Postgres directly with no API layer, while Cowork can't. Choosing Cowork means building an HTTP or MCP surface for that reason specifically.
-
-   A second argument for that surface: it's also the natural credential boundary. If it exists for Postgres anyway, the AgentMail and Exa calls can sit behind it too, so the agent holds one scoped token instead of three provider keys, and rotating a provider key never touches the agent.
-2. **Where the intro-guidelines file lives.** The argument for keeping it in the repo: both processes share one copy, and `git log` tells you what changed when the intros get worse.
-3. **How credentials reach a remote agent.** Blocked on (1). `.env` is gitignored, so a clone never carries values — the repo states which variable is needed and the runtime supplies it. A self-hosted runner injects them on the box; a hosted agent needs them in the platform's secret store. Note that Apollo doesn't fit this model at all: it's a browser session, not an API key, so it needs a logged-in browser profile on a machine we control, or replacing Apollo with Exa-only.
+1. **Apollo has no home in a hosted routine.** Contact recon is browser-only by rule, and
+   a cloud routine has no logged-in browser profile. Either Part 2 drops to Exa-only, or
+   recon runs somewhere with a real browser. Decide when Part 2 is built.
+2. **The database.** Nothing is provisioned. The schema below is a design, and the digest
+   currently arrives by email instead.
+3. **Where the intro-guidelines file lives** — [shared/voice.md](shared/voice.md) and
+   [shared/jordan-cover-letter-system.md](shared/jordan-cover-letter-system.md) overlap.
+   Whether the rewrite payload gets one, the other, or a merged version is unresolved.
 
 ## Known inconsistencies to reconcile
 
 These are documented so they aren't rediscovered later. None block current work.
 
 - **Process 2's shape is still provisional.** [steps.md](steps.md) describes three steps: rewrite, contact lookup, then assembly with no model call. That is what the OpenClaw system did, and it is the current plan, but nothing is built yet. Revisit when Part 2 is actually implemented.
-- **Step files describe the old email-based system** in their body text, with the new database/UI design called out inline as "new-architecture note" blocks. See [agents.md](agents.md) § 5.
+- **Step files carry "new-architecture note" blocks** describing the eventual database/UI
+  delivery. Email delivery is what Part 1 actually does today, so the body text is
+  current and those notes are the forward-looking part. See [agents.md](agents.md) § 5.
 - **[shared/jordan-cover-letter-system.md](shared/jordan-cover-letter-system.md) has its own "workflow step 1/2/3"**, unrelated to the pipeline numbering. It's an internal reading order for that document, not pipeline structure. Cosmetic; nothing points at it by number.
-- **Credential rotation is pending.** Two AgentMail keys and the Apollo password were committed in `165d7c7` and are being rotated rather than scrubbed from history. Paige's AgentMail key was exposed by the same commit and needs rotating too, even though it's no longer referenced here.
+- **Credential rotation.** Two AgentMail keys and the Apollo password were committed in
+  `165d7c7` and are being rotated rather than scrubbed from history. Jordan's AgentMail
+  key has since been rotated twice — once for that commit, once after a debugging session
+  printed it into a transcript. **Paige's AgentMail key, exposed by the same commit, and
+  the Apollo password still need rotating.**
