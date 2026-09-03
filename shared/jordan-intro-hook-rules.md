@@ -13,6 +13,13 @@ Rules Jordan gave explicitly on Jul 21, 2026 after reviewing 10 intro drafts:
 
 **How to apply:** If a JD names a specific tool that's also in his stack, the hook can reference the *practice* ("AI-assisted development tooling") but not the tool name.
 
+**Confirmed and widened, Sep 2 2026.** This applies to AI coding tools too, not just
+languages and frameworks. The Intro Playbook previously said naming a tool the posting
+mentions beats the generic AI hook; that line has been corrected. Jordan on a hook
+produced under the old reading: *"your values of using claude ai is exactly where I
+excel"* — "it was pretty bad." Two failures in one sentence: it names the tool, and
+"exactly where I excel" is the empty phrasing the playbook already rejects.
+
 ---
 
 **No "0 to 1 products" language.** He doesn't know what this means; it's PM jargon, not his vocabulary.
